@@ -4,10 +4,17 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
+// zustand store 호출
+import useAuthStore from '../../../store/authStore';
+
 function Page(props) {
     const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL
     const API_URL = `${LOCAL_API_BASE_URL}/members/login`;
     const router = useRouter(); // useRouter 초기화
+
+    const { login } = useAuthStore(); // zustand login 함수 가져오기 
+
+
     // 텍스트필드 초기화
     const initUvo = {
         m_id: "",
@@ -23,12 +30,14 @@ function Page(props) {
     }
     function goServer(params) {
         axios.post(API_URL, uvo)
-            .then(data => {
-                if (data.data.success) {
-                    console.log(data.data);
-                    alert(data.data.message);
+            .then(response => {
+                const data = response.data;
+                if (data.success) {
+                    alert(data.message);
+                    login(data.data, data.token);
+                    router.push('/');
                 } else {
-                    alert(data.data.message);
+                    alert(data.message);
                     setUvo(initUvo);
                 }
             });

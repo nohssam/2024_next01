@@ -5,6 +5,8 @@
 // 해당 경로의 page.js 파일이 반드시 필요한다.
 
 // 자식컴포넌트 
+import itemList from './itemList/page'
+
 export default function Home() {
   return (
     // 해당 내용은 부모컴포넌트의 props => {children} 에 삽입된다.
@@ -16,6 +18,9 @@ export default function Home() {
       {/* 너비 높이는 선택 사항 */}
       {/* <p><Image src={img01} /></p>
       <p><Image src={img01} width={50} height={50} /></p> */}
+
+      {itemList}
+
     </>
   );
 }
