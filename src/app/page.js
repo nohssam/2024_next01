@@ -5,7 +5,7 @@
 // 해당 경로의 page.js 파일이 반드시 필요한다.
 
 // 자식컴포넌트 
-import itemList from './itemList/page'
+import ItemList from './itemList/page'
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
       {/* <p><Image src={img01} /></p>
       <p><Image src={img01} width={50} height={50} /></p> */}
 
-      {itemList}
+      <ItemList />
 
     </>
   );
