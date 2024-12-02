@@ -1,13 +1,14 @@
 "use client"
 import { Avatar, Button, FormControl, Stack, TextField } from '@mui/material';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 function Page(props) {
     const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL
     const API_URL = `${LOCAL_API_BASE_URL}/members/join`;
     const router = useRouter(); // useRouter 초기화
+    // 텍스트필드 초기화
     const initUvo = {
         m_id: "",
         m_pw: "",
