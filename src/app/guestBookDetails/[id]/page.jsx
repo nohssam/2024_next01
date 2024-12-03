@@ -16,21 +16,17 @@ function Page({ params }) {
             try {
                 setLoading(true); // 로딩 시작
 
-                // params 언래핑: Promise로 감싸진 값을 꺼내는 과정
-                // Promise.resolve(params)의 역할
-                // Promise.resolve()는 전달된 값을 Promise 객체로 변환합니다.
-                // 만약 params가 이미 Promise라면, 원래 Promise를 반환합니다.
-                // 만약 params가 일반 객체라면, 이를 즉시 해결된(resolved) Promise로 감쌉니다.
-                // Promise인지 아닌지 신경 쓰지 않고 항상 비동기적으로 다룰 수 있습니다.
-                // const resolvedParams = await Promise.resolve(params); // params 언래핑
-                // const { id } = resolvedParams; // id 추출
-
                 const { id } = await Promise.resolve(params);
-                const API_URL = `${LOCAL_API_BASE_URL}/guestbook/detail?gb_idx=${id}`;
+                const API_URL = `${LOCAL_API_BASE_URL}/guestbook/detail/${id}`;
 
                 // 데이터 가져오기
                 const response = await axios.get(API_URL);
-                setItem(response.data);
+                const data = response.data;
+                if (data.success) {
+                    setItem(data.data);
+                } else {
+                    setError("Failed to fetch product data.");
+                }
             } catch (err) {
                 console.error("Error fetching product data:", err);
                 setError("Failed to fetch product data.");
@@ -65,24 +61,27 @@ function Page({ params }) {
                 <Table className="custom-table">
                     <TableBody>
                         <TableRow>
+                            <TableCell className="table-cell">IDX</TableCell>
                             <TableCell className="table-cell">{item.gb_idx}</TableCell>
                         </TableRow>
                         <TableRow>
+                            <TableCell className="table-cell">NAME</TableCell>
                             <TableCell className="table-cell">{item.gb_name}</TableCell>
                         </TableRow>
                         <TableRow>
+                            <TableCell className="table-cell">SUBJECT</TableCell>
                             <TableCell className="table-cell">{item.gb_subject}</TableCell>
                         </TableRow>
                         <TableRow>
+                            <TableCell className="table-cell">CONTENT</TableCell>
                             <TableCell className="table-cell">{item.gb_content}</TableCell>
                         </TableRow>
                         <TableRow>
+                            <TableCell className="table-cell">EMAIL</TableCell>
                             <TableCell className="table-cell">{item.gb_email}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell className="table-cell">{item.gb_pw}</TableCell>
-                        </TableRow>
-                        <TableRow>
+                            <TableCell className="table-cell">DATE</TableCell>
                             <TableCell className="table-cell">{item.gb_regdate.substring(0, 10)}</TableCell>
                         </TableRow>
                     </TableBody>
