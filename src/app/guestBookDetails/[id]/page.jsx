@@ -13,7 +13,7 @@ function Page({ params }) {
     const [item, setItem] = useState(null);       // 데이터 상태
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [error, setError] = useState(null);     // 에러 상태
-    const { isAuthenticated } = useAuthStore();       // 로그인 상태
+    const { isAuthenticated, token } = useAuthStore();       // 로그인 상태
     const router = useRouter();
 
     useEffect(() => {
@@ -54,7 +54,11 @@ function Page({ params }) {
         // 상세보기 성공했을 때 데이터 item에 넣었다.
         const API_URL = `${LOCAL_API_BASE_URL}/guestbook/delete/${item.gb_idx}`;
         try {
-            const response = await axios.delete(API_URL);
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             if (response.data.success) {
                 alert(response.data.message);
                 router.push("/guestBookList")
@@ -68,7 +72,8 @@ function Page({ params }) {
 
     // update
     const handleUpdate = async () => {
-
+        // 수정페이지로 이동
+        router.push(`/guestBookUpdate/${item.gb_idx}`)
     }
 
     // 로딩 중
@@ -93,10 +98,6 @@ function Page({ params }) {
             <TableContainer component={Paper} className="table-container">
                 <Table className="custom-table">
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="table-cell">IDX</TableCell>
-                            <TableCell className="table-cell">{item.gb_idx}</TableCell>
-                        </TableRow>
                         <TableRow>
                             <TableCell className="table-cell">NAME</TableCell>
                             <TableCell className="table-cell">{item.gb_name}</TableCell>
