@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 
 function Page({ params }) {
     const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
+    const LOCAL_IMG_URL = process.env.NEXT_PUBLIC_LOCAL_IMG_URL;
     const [item, setItem] = useState(null);       // 데이터 상태
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [error, setError] = useState(null);     // 에러 상태
@@ -118,6 +119,25 @@ function Page({ params }) {
                             <TableCell className="table-cell">DATE</TableCell>
                             <TableCell className="table-cell">{item.gb_regdate.substring(0, 10)}</TableCell>
                         </TableRow>
+                        {item.gb_filename && (
+                            <TableRow>
+                                <TableCell className="table-cell">Image</TableCell>
+                                <TableCell className="table-cell">
+                                    <a
+                                        href={`${LOCAL_API_BASE_URL}/guestbook/download/${item.gb_filename}`} // Spring Boot 다운로드 URL
+                                        download={item.gb_filename} // 다운로드 파일 이름 지정
+                                        target="_blank" // 새 탭에서 열림
+                                        rel="noopener noreferrer" // 보안 향상을 위해 추가
+                                    >
+                                        <img
+                                            src={`${LOCAL_IMG_URL}/${item.gb_filename}`}
+                                            alt="Uploaded Image"
+                                            style={{ width: "150px" }}
+                                        />
+                                    </a>
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
