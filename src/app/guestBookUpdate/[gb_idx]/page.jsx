@@ -71,7 +71,7 @@ function Page({ params }) {
         const { gb_idx } = await Promise.resolve(params);
         const API_URL = `${LOCAL_API_BASE_URL}/guestbook/update/${gb_idx}`;
         try {
-            const response = await axios.get(API_URL, editData, {
+            const response = await axios.put(API_URL, editData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -121,7 +121,7 @@ function Page({ params }) {
                         <TableRow>
                             <TableCell className="table-cell">CONTENT</TableCell>
                             <TableCell className="table-cell">
-                                <TextField type='text' name="gb_content" value={editData.gb_content} onChange={changItem} />
+                                <TextField type='text' multiline rows={4} name="gb_content" value={editData.gb_content} onChange={changItem} />
                             </TableCell>
                         </TableRow>
                         <TableRow>
