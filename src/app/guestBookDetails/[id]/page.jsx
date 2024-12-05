@@ -14,7 +14,7 @@ function Page({ params }) {
     const [item, setItem] = useState(null);                 // 데이터 상태
     const [loading, setLoading] = useState(true);           // 로딩 상태
     const [error, setError] = useState(null);               // 에러 상태
-    const { isAuthenticated, token } = useAuthStore();       // 로그인 상태
+    const { isAuthenticated, token, user } = useAuthStore();       // 로그인 상태
     const router = useRouter();
 
     useEffect(() => {
@@ -91,7 +91,8 @@ function Page({ params }) {
             </div>
         );
     }
-
+    // 글 작성자와 현재 로그인한 사용자 비교 
+    const isOwner = isAuthenticated && String(user.m_id) === String(item.gb_id);
     // 로딩 완료 후
     return (
         <>
@@ -123,24 +124,35 @@ function Page({ params }) {
                             <TableRow>
                                 <TableCell className="table-cell">Image</TableCell>
                                 <TableCell className="table-cell">
-                                    {isAuthenticated ? (
-                                        <a
-                                            href={`${LOCAL_API_BASE_URL}/guestbook/download/${item.gb_filename}`} // Spring Boot 다운로드 URL
-                                            download={item.gb_filename} // 다운로드 파일 이름 지정
-                                            target="_blank" // 새 탭에서 열림
-                                            rel="noopener noreferrer" // 보안 향상을 위해 추가
-                                        >
+                                    {isOwner ? (
+                                        <>
+                                            {/* 이미지 미리보기 */}
                                             <img
-                                                src={`${LOCAL_IMG_URL}/${item.gb_filename}`}
+                                                src={`${LOCAL_IMG_URL}/${item.gb_filename}`} // 이미지 URL
                                                 alt="Uploaded Image"
-                                                style={{ width: "150px" }}
+                                                style={{ width: "150px", cursor: "pointer", marginRight: "10px" }}
+                                            // onClick={() => window.open(`${LOCAL_IMG_URL}/${item.gb_filename}`, '_blank')} // 클릭 시 새 창 열림
                                             />
-                                        </a>) : (
-                                        <img
-                                            src={`${LOCAL_IMG_URL}/${item.gb_filename}`}
-                                            alt="Uploaded Image"
-                                            style={{ width: "150px" }}
-                                        />
+                                            {/* 다운로드 링크 */}
+                                            <a
+                                                href={`${LOCAL_API_BASE_URL}/guestbook/download/${item.gb_filename}`} // Spring Boot 다운로드 URL
+                                                download={item.gb_filename} // 다운로드 파일 이름 지정
+                                                target="_blank" // 새 탭에서 열림
+                                                rel="noopener noreferrer" // 보안 향상을 위해 추가
+                                                style={{ textDecoration: "none", color: "#007bff" }}
+                                            >
+                                                다운로드
+                                            </a>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <img
+                                                src={`${LOCAL_IMG_URL}/${item.gb_filename}`} // 이미지 URL
+                                                alt="Uploaded Image"
+                                                style={{ width: "150px", cursor: "pointer", marginRight: "10px" }}
+                                            />
+                                            <span> 다운로드 권한 없음</span>
+                                        </>
                                     )}
                                 </TableCell>
                             </TableRow>
@@ -152,14 +164,14 @@ function Page({ params }) {
                 <Button variant='contained'
                     color='primary'
                     onClick={handleUpdate}
-                    disabled={!isAuthenticated}
+                    disabled={!isOwner}
                 >수정</Button>
 
                 <Button variant='contained'
                     color='error'
                     onClick={handleDelete}
                     style={{ marginLeft: "10px" }}
-                    disabled={!isAuthenticated}
+                    disabled={!isOwner}
                 >삭제</Button>
             </div>
         </>
