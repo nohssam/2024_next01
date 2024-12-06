@@ -1,8 +1,8 @@
 "use client"
 import { Avatar, Button, FormControl, Stack, TextField } from '@mui/material';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from 'react';
 
 // zustand store 호출
 import useAuthStore from '../../../store/authStore';
@@ -11,7 +11,6 @@ function Page(props) {
     const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL
     const API_URL = `${LOCAL_API_BASE_URL}/members/login`;
     const router = useRouter(); // useRouter 초기화
-
     const { login } = useAuthStore(); // zustand login 함수 가져오기 
 
 
@@ -19,9 +18,28 @@ function Page(props) {
     const initUvo = {
         m_id: "",
         m_pw: ""
-    }
+    };
+
     const [uvo, setUvo] = useState(initUvo);
     const isBtnChk = !uvo.m_id || !uvo.m_pw;
+
+    // URL 쿼리 파라미터에서 토큰 확인 후 처리
+    useEffect(() => {
+        alert("로그인 성공")
+        const searchParams = new URLSearchParams(window.location.search);
+        const token = searchParams.get("token");
+        const username = searchParams.get("username");
+        const email = searchParams.get("email");
+        console.log(to)
+        if (token && username && email) {
+            alert("로그인 성공");
+            // 사용자 정보 생성
+            const user = { username, email };
+            login(user, token); // Zustand 상태에 저장
+            router.push("/"); // 홈으로 이동
+        }
+    }, [login, router]);
+
     function changeUvo(e) {
         const { name, value } = e.target;
         setUvo(prev => ({
@@ -42,6 +60,15 @@ function Page(props) {
                 }
             });
     }
+
+    function handleKakaoLogin() {
+        window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+    }
+
+    function handleNaverLogin() {
+        window.location.href = "http://localhost:8080/oauth2/authorization/naver";
+    }
+
     return (
         <div>
             <FormControl>
@@ -51,6 +78,8 @@ function Page(props) {
                     <TextField type='text' label='아이디' name='m_id' value={uvo.m_id} onChange={changeUvo} />
                     <TextField type='password' label='패스워드' name='m_pw' value={uvo.m_pw} onChange={changeUvo} />
                     <Button fullWidth variant='contained' disabled={isBtnChk} onClick={goServer}>Sign in</Button>
+                    <Button fullWidth variant='contained' onClick={handleKakaoLogin} style={{ backgroundColor: '#FFEB3B' }}>카카오 로그인</Button>
+                    <Button fullWidth variant='contained' onClick={handleNaverLogin} style={{ backgroundColor: '#03C75A' }}>네이버 로그인</Button>
                 </Stack>
             </FormControl>
         </div>
