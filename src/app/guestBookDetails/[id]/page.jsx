@@ -126,34 +126,23 @@ function Page({ params }) {
                                 <TableCell className="table-cell">
                                     {isOwner ? (
                                         <>
-                                            {/* 이미지 미리보기 */}
                                             <img
-                                                src={`${LOCAL_IMG_URL}/${item.gb_filename}`} // 이미지 URL
-                                                alt="Uploaded Image"
-                                                style={{ width: "150px", cursor: "pointer", marginRight: "10px" }}
-                                            // onClick={() => window.open(`${LOCAL_IMG_URL}/${item.gb_filename}`, '_blank')} // 클릭 시 새 창 열림
-                                            />
-                                            {/* 다운로드 링크 */}
-                                            <a
-                                                href={`${LOCAL_API_BASE_URL}/guestbook/download/${item.gb_filename}`} // Spring Boot 다운로드 URL
-                                                download={item.gb_filename} // 다운로드 파일 이름 지정
-                                                target="_blank" // 새 탭에서 열림
-                                                rel="noopener noreferrer" // 보안 향상을 위해 추가
+                                                src={`${LOCAL_IMG_URL}/${item.gb_filename}`}
+                                                alt="image"
+                                                style={{ width: "150px", cursor: "pointer", marginRight: "10px" }} />
+                                            <a href={`${LOCAL_API_BASE_URL}/guestbook/download/${item.gb_filename}`}
+                                                target='_blank'
+                                                rel="noopener noreferrer"
                                                 style={{ textDecoration: "none", color: "#007bff" }}
-                                            >
-                                                다운로드
-                                            </a>
-                                        </>
-                                    ) : (
+                                            > 다운로드 </a>
+                                        </>) : (
                                         <>
                                             <img
-                                                src={`${LOCAL_IMG_URL}/${item.gb_filename}`} // 이미지 URL
-                                                alt="Uploaded Image"
-                                                style={{ width: "150px", cursor: "pointer", marginRight: "10px" }}
-                                            />
-                                            <span> 다운로드 권한 없음</span>
-                                        </>
-                                    )}
+                                                src={`${LOCAL_IMG_URL}/${item.gb_filename}`}
+                                                alt="image"
+                                                style={{ width: "150px", cursor: "pointer", marginRight: "10px" }} />
+                                            <span>다우로드 권한없음</span>
+                                        </>)}
                                 </TableCell>
                             </TableRow>
                         )}
