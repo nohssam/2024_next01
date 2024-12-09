@@ -8,6 +8,7 @@ import './globals.css'
 // zustand store 호출
 import useAuthStore from '../../store/authStore';
 import { Button, Stack } from "@mui/material";
+import { useEffect } from "react";
 
 // 부모컴포넌트
 export default function RootLayout({ children }) {
@@ -19,6 +20,20 @@ export default function RootLayout({ children }) {
     logout();
     alert("로그아웃 되었습니다.")
   }
+
+  useEffect(() => {
+    // 브라우저 종료 시 로컬 스토리지 초기화
+    const handleBeforeUnload = () => {
+      localStorage.removeItem('auth-storage'); // 로컬스토리지에서 토큰 삭제
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <html lang="en">
       <body style={{ textAlign: "center" }}>

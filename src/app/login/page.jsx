@@ -25,7 +25,6 @@ function Page(props) {
 
     // URL 쿼리 파라미터에서 토큰 확인 후 처리
     useEffect(() => {
-        alert("로그인 성공")
         const searchParams = new URLSearchParams(window.location.search);
         const token = searchParams.get("token");
         const username = searchParams.get("username");
