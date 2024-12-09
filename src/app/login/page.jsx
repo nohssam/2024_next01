@@ -30,11 +30,15 @@ function Page(props) {
         const token = searchParams.get("token");
         const username = searchParams.get("username");
         const email = searchParams.get("email");
-        console.log(to)
-        if (token && username && email) {
+        const name = searchParams.get("name");
+
+        if (token && username && email && name) {
             alert("로그인 성공");
             // 사용자 정보 생성
-            const user = { username, email };
+            const user = {
+                username, email, name
+
+            };
             login(user, token); // Zustand 상태에 저장
             router.push("/"); // 홈으로 이동
         }

@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
             <Link href="/guestBookList">Guestbook(Spring 서버)</Link>
             {isAuthenticated ? (
               <>
-                <span style={{ fontSize: "16px" }}><b>{user.m_id}님 환영합니다.</b></span>
+                <span style={{ fontSize: "16px" }}><b>{user.name}님 환영합니다.</b></span>
                 <Button variant="contained" onClick={handleLogout}>logout(Spring 서버)</Button>
               </>
             ) : (
